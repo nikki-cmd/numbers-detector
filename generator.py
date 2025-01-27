@@ -24,7 +24,7 @@ def create_number_from_digits(x_data, y_data, num_digits=3, samples=1000):
     return np.array(images), np.array(labels)
 
 
-num_digits = 3  
+num_digits = random.randint(1, 9)
 samples = 1000  
 new_images, new_labels = create_number_from_digits(x_train, y_train, num_digits, samples)
 
