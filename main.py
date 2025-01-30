@@ -43,20 +43,15 @@ single_images_expanded = [np.expand_dims(img, axis=-1) for img in single_images]
 # Объединяем все изображения в один массив с формой (4, 28, 28, 1)
 single_images_array = np.array(single_images_expanded)
 
-# Проверяем форму
-print(single_images_array.shape)  # Должно быть (4, 28, 28, 1)
+res = ""
 
-d={0: '0', 1: '1', 2: '2', 3: '3', 4: '4', 5: '5', 6: '6', 7: '7', 8: '8', 9: '9'}
-
-# Делаем предсказания для каждого изображения
 for i in range(single_images_array.shape[0]):
     prediction = model.predict(np.expand_dims(single_images_array[i], axis=0))
-    print(f"Predictions for image {i+1}:", np.argmax(prediction))
+    res += str(np.argmax(prediction))
     
-    # Отображаем изображение
-    plt.imshow(single_images_array[i, :, :, 0], cmap='gray')  # Убираем ось каналов для отображения
-    plt.title(f'Image {i+1}')
-    plt.show()
+plt.imshow(images, cmap='gray')  
+plt.title(res)
+plt.show()
     
 
 
