@@ -3,6 +3,7 @@ from sklearn.model_selection import train_test_split
 import matplotlib.pyplot as plt
 from model import LogRegModel
 from keras.models import load_model
+import pickle
 
 def chunks(lst, n):
     squares = []
@@ -11,27 +12,22 @@ def chunks(lst, n):
         squares.append(square)
     return squares
 
-data = np.load("mnist_numbers.npz")
-images = data['images']
-labels = data['labels']
-
-images = images / 255.0 
+with open("mnist_numbers.pkl", "rb") as f:
+    data = pickle.load(f)
+    images = data["images"]
+    labels = data["labels"]
 
 model = load_model("models/model.keras")
 
-
-input_len = images[0].shape[1] // 28
-
-
 for picture in range(10):
-    image = images[picture]
 
+    image = images[picture]
+    input_len = image.shape[1] // 28
     single_images = []
 
     for i in range(input_len):
         single = [row[i*28:(i+1)*28] for row in image]
         single_images.append(single)
-    print(len(single_images))
 
     single_images_expanded = [np.expand_dims(img, axis=-1) for img in single_images]
 
@@ -44,5 +40,5 @@ for picture in range(10):
         res += str(np.argmax(prediction))
         
     plt.imshow(image, cmap='gray')  
-    plt.title(res)
+    plt.title(f"Predicted: {res}")
     plt.show()
