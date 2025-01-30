@@ -19,39 +19,39 @@ labels = data['labels']
 # Нормализация изображений (если нужно)
 images = images / 255.0  # Приведение значений пикселей в диапазон [0, 1]
 
-# Разделение на тренировочную и тестовую выборки
-x_train, x_test, y_train, y_test = train_test_split(images, labels, test_size=0.2, random_state=42)
-
-print("Размер тренировочной выборки:", x_train.shape, y_train.shape)
-print("Размер тестовой выборки:", x_test.shape, y_test.shape)
-
 model = load_model("models/model.keras")
 
-images = images[0]
 
-# Список для хранения отдельных изображений
-single_images = []
+input_len = images[0].shape[1] // 28
 
-# Разделяем images[0] на 4 изображения 28x28
-for i in range(4):
-    single = [row[i*28:(i+1)*28] for row in images]
-    single_images.append(single)
 
-# Преобразуем каждое изображение в форму (28, 28, 1), добавив ось каналов
-single_images_expanded = [np.expand_dims(img, axis=-1) for img in single_images]
+for picture in range(10):
+    image = images[picture]
 
-# Объединяем все изображения в один массив с формой (4, 28, 28, 1)
-single_images_array = np.array(single_images_expanded)
+    # Список для хранения отдельных изображений
+    single_images = []
 
-res = ""
+    # Разделяем images[0] на 4 изображения 28x28
+    for i in range(input_len):
+        single = [row[i*28:(i+1)*28] for row in image]
+        single_images.append(single)
+    print(len(single_images))
 
-for i in range(single_images_array.shape[0]):
-    prediction = model.predict(np.expand_dims(single_images_array[i], axis=0))
-    res += str(np.argmax(prediction))
-    
-plt.imshow(images, cmap='gray')  
-plt.title(res)
-plt.show()
+    # Преобразуем каждое изображение в форму (28, 28, 1), добавив ось каналов
+    single_images_expanded = [np.expand_dims(img, axis=-1) for img in single_images]
+
+    # Объединяем все изображения в один массив с формой (4, 28, 28, 1)
+    single_images_array = np.array(single_images_expanded)
+
+    res = ""
+
+    for i in range(single_images_array.shape[0]):
+        prediction = model.predict(np.expand_dims(single_images_array[i], axis=0))
+        res += str(np.argmax(prediction))
+        
+    plt.imshow(image, cmap='gray')  
+    plt.title(res)
+    plt.show()
     
 
 
