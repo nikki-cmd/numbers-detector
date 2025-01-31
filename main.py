@@ -5,13 +5,6 @@ from model import LogRegModel
 from keras.models import load_model
 import pickle
 
-def chunks(lst, n):
-    squares = []
-    for i in range(0, len(lst), n):
-        square = lst[i:i + n]
-        squares.append(square)
-    return squares
-
 with open("mnist_numbers.pkl", "rb") as f:
     data = pickle.load(f)
     images = data["images"]
